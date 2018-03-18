@@ -21,6 +21,20 @@ namespace BaseballQuery
     /// </summary>
     public partial class MainWindow : Window
     {
+
+        private string lastNameToSearch;
+
+        public string LastNameToSearch
+        {
+            get
+            {
+                return lastNameToSearch;
+            }
+            set
+            {
+                lastNameToSearch = value;
+            }
+        }
         public MainWindow()
         {
             InitializeComponent();
@@ -51,6 +65,19 @@ namespace BaseballQuery
         private void resetLastNames_Click(object sender, RoutedEventArgs e)
         {
             DisplayAllPlayers();
+        }
+
+        private void lastNameQueryTB_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            LastNameToSearch = lastNameQueryTB.Text;
+        }
+
+        private void searchButton_Click(object sender, RoutedEventArgs e)
+        {
+            System.Windows.Data.CollectionViewSource playerViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("playerViewSource")));
+
+            playerViewSource.Source = dbcontext.Players.Local
+                .Where(lastName => lastName.LastName == lastNameToSearch);
         }
     }
 }
